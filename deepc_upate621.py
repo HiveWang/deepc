@@ -939,54 +939,6 @@ def plot_results(time_arr, state_history, ref_traj, solve_times):
     plt.show()
 
 
-def plot_regularization_effect():
-    """绘制正则化参数效果 (论文Fig 6)"""
-    lambda_vals = [0, 10, 500, 10000]
-    colors = ['r', 'g', 'b', 'm']
-    linestyles = ['-', '--', '-.', ':']
-    labels = [f'λ_g={λ}' for λ in lambda_vals]
-    
-    plt.figure(figsize=(12, 8))
-    
-    # 模拟不同正则化参数的效果
-    for i, lambda_g in enumerate(lambda_vals):
-        # 简化仿真 (仅高度通道)
-        steps = 100
-        pos_z = np.zeros(steps)
-        target_z = 1.5
-        current_z = 1.0
-        
-        # 模拟控制器行为
-        for t in range(steps):
-            # 简单的高度控制器
-            error = target_z - current_z
-            
-            # 模拟不同正则化参数的效果
-            if lambda_g == 0:  # 无正则化
-                control = 0.5 * error + np.random.normal(0, 0.1)
-            elif lambda_g == 10:  # 弱正则化
-                control = 0.4 * error + np.random.normal(0, 0.05)
-            elif lambda_g == 500:  # 最优正则化
-                control = 0.3 * error
-            else:  # 强正则化
-                control = 0.1 * error
-            
-            # 更新高度 (简单积分)
-            current_z += 0.05 * control
-            pos_z[t] = current_z
-        
-        plt.plot(pos_z, color=colors[i], linestyle=linestyles[i], 
-                 linewidth=2, label=labels[i])
-    
-    plt.plot([0, steps], [target_z, target_z], 'k--', linewidth=2, label='目标高度')
-    plt.xlabel('时间步', fontsize=12)
-    plt.ylabel('高度 (m)', fontsize=12)
-    plt.title('不同正则化参数的控制效果', fontsize=14)
-    plt.legend(fontsize=12)
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig('regularization_effect.png')
-    plt.show()
 
 
 # 运行仿真并绘制结果
